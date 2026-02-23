@@ -71,6 +71,27 @@ export SQLITE_PATH=./data/fit_agents.db
 uvicorn app.main:app --reload
 ```
 
+## CI/CD
+
+This repository now includes GitHub Actions workflows:
+
+- CI: `/.github/workflows/ci.yml`
+- Runs on every push and pull request.
+- Tests on Python 3.10 and 3.12.
+- Executes compile checks and `pytest`.
+
+- CD: `/.github/workflows/cd.yml`
+- Runs on pushes to `main` (and manually via `workflow_dispatch`).
+- Builds Docker image from `/Dockerfile`.
+- Pushes image to GHCR as `ghcr.io/<owner>/<repo>`.
+- Optionally calls a deploy webhook if `DEPLOY_WEBHOOK_URL` secret is configured.
+
+Required setup in GitHub:
+
+- Enable GitHub Actions for the repository.
+- Keep package permissions enabled for `GITHUB_TOKEN` (workflow already requests `packages: write`).
+- Optional: add repository secret `DEPLOY_WEBHOOK_URL` if you want automatic deploy trigger after image publish.
+
 ## Main endpoints
 
 - `GET /health`
